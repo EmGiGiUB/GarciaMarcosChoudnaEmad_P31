@@ -1,6 +1,6 @@
 package prog2.model;
 
-public class Usuari implements InUsuari {
+public abstract class Usuari implements InUsuari {
     @Override
     void setEmail(String email);
     @Override
