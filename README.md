@@ -1,2 +1,5 @@
-# GarciaMarcosChoudnaEmad_P31
-Practica 3 parte 1
+# GarciaMarcosChoudnaEmad_P3
+
+-Tareas a realizar -
+
+1 - Dividir trabajo
