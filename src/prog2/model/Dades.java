@@ -3,6 +3,7 @@ package prog2.model;
 import prog2.vista.BiblioException;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Iterator;
 
 public class Dades implements InDades {
@@ -23,7 +24,7 @@ public class Dades implements InDades {
                 throw new BiblioException("Un exemplar amb aquest ID ja està registrat");
             }
         }
-        Exemplar(id, autor, titol, admetPrestecLlarg);
+        new Exemplar(id, autor, titol, admetPrestecLlarg);
     }
 
     /**
@@ -56,7 +57,7 @@ public class Dades implements InDades {
                 throw new BiblioException("Un usuari amb aquest email ja està registrat");
             }
         }
-        Usuari(email, nom, adreca, esEstudiant);
+        new Usuari(email, nom, adreca, esEstudiant);
     }
 
     /**
@@ -76,7 +77,17 @@ public class Dades implements InDades {
 
     @Override
     public void afegirPrestec(int exemplarPos, int usuariPos, boolean esLlarg) throws BiblioException{
-
+        if (exemplarPos < 0 || usuariPos < 0){
+            throw new BiblioException("L'índex donat no és correcte.");
+        }
+        if (llistaUsuaris.isEmpty() || llistaExemplars.isEmpty()){
+            throw new BiblioException("No es pot accedir a l'index ja que les llistes estan buides.");
+        }
+        Date dataActual = new Date();
+        if (esLlarg) {
+            new PrestecLlarg(llistaExemplars.get(exemplarPos), llistaUsuaris.get(usuariPos), dataActual);
+        }
+        else new PrestecNormal(llistaExemplars.get(exemplarPos), llistaUsuaris.get(usuariPos), dataActual);
     }
 
     /**
@@ -84,18 +95,37 @@ public class Dades implements InDades {
      * El préstec s'identifica amb la seva posició dins de l'ArrayList
      */
     @Override
-    public void retornarPrestec(int position) throws BiblioException;
+    public void retornarPrestec(int position) throws BiblioException{
+        if (llistaPrestecs.isEmpty()){
+            throw new BiblioException("No hi ha préstecs per retornar.");
+        }
+        llistaPrestecs.get(position).retorna();
+    }
 
     /**
      * Recuperar préstecs. Retorna un ArrayList amb tots els préstecs
      */
     @Override
-    public ArrayList<Prestec> recuperaPrestecs();
+    public ArrayList<Prestec> recuperaPrestecs(){
+        ArrayList<Prestec> prestecs = new ArrayList<>(llistaPrestecs);
+        return prestecs;
+    }
 
     /**
      * Recuperar préstecs. Retorna un ArrayList amb els préstecs no retornats
      */
     @Override
-    public ArrayList<Prestec> recuperaPrestecsNoRetornats();
+    public ArrayList<Prestec> recuperaPrestecsNoRetornats(){
+        ArrayList<Prestec> prestecsNoRetornats = new ArrayList<>();
+        Iterator<Prestec> iterator = llistaPrestecs.iterator();
+
+        while(iterator.hasNext()){
+            Prestec prestecActual = iterator.next();
+            if (!prestecActual.retornat){
+                prestecsNoRetornats.add(prestecActual);
+            }
+        }
+        return prestecsNoRetornats;
+    }
 }
 

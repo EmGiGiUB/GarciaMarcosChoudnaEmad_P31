@@ -4,7 +4,7 @@ import prog2.vista.BiblioException;
 
 import java.util.Date;
 
-public class Prestec implements InPrestec{
+public abstract class Prestec implements InPrestec{
 
     protected Date dataCreacio;
     protected Date dataLimitRetorn;
@@ -46,12 +46,8 @@ public class Prestec implements InPrestec{
         return dataLimitRetorn;
     }
     @Override
-    public String tipusPrestec(){
-        if(duradaPrestec() > 70){
-            return "Prèstec llarg";
-        }
-        else return "Prèstec curt";
-    }
+    public abstract String tipusPrestec();
+
     @Override
     public void setRetornat(boolean retornat){this.retornat = retornat;}
     @Override
@@ -73,10 +69,7 @@ public class Prestec implements InPrestec{
      * Retornar durada prestec. La durada del prestec depen del tipus de prestec
      */
     @Override
-    public long duradaPrestec(){
-        long diferencia = Math.abs(getDataCreacio().getTime() - getDataLimitRetorn().getTime());
-        return diferencia;
-    }
+    public abstract long duradaPrestec();
 
     /**
      * Retornar true si el prestec està endarrerit per a la data actual
