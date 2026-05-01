@@ -1,4 +1,5 @@
 package prog2.model;
 
-public class Estudiant {
+public class Estudiant extends Usuari{
+    
 }
