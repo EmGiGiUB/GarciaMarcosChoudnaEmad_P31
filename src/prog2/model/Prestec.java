@@ -1,49 +1,92 @@
 package prog2.model;
 
+import prog2.vista.BiblioException;
+
 import java.util.Date;
 
-public class Prestec implements InPrestec{
+public abstract class Prestec implements InPrestec{
+
+    protected Date dataCreacio;
+    protected Date dataLimitRetorn;
+    protected boolean retornat;
+    protected Usuari usuari;
+    protected Exemplar exemplar;
+
+    public Prestec(Exemplar exemplar, Usuari usuari, Date dataCreacio){
+        this.dataCreacio = dataCreacio;
+        this.usuari = usuari;
+        this.exemplar = exemplar;
+        this.retornat = false;
+        this.dataLimitRetorn = new Date(this.dataCreacio.getTime() + this.duradaPrestec());
+    }
     @Override
-    void setExemplar(Exemplar exemplar);
+    public void setExemplar(Exemplar exemplar){this.exemplar = exemplar;}
     @Override
-    Exemplar getExemplar();
+    public Exemplar getExemplar(){return exemplar;}
     @Override
-    void setUsuari(Usuari usuari);
+    public void setUsuari(Usuari usuari){this.usuari = usuari;}
     @Override
-    Usuari getUsuari();
+    public Usuari getUsuari(){
+        return usuari;
+    }
     @Override
-    void setDataCreacio(Date data);
+    public void setDataCreacio(Date data){
+        this.dataCreacio = data;
+    }
     @Override
-    Date getDataCreacio();
+    public Date getDataCreacio(){
+        return dataCreacio;
+    }
     @Override
-    void setDataLimitRetorn(Date data);
+    public void setDataLimitRetorn(Date data){
+        this.dataLimitRetorn = data;
+    }
     @Override
-    Date getDataLimitRetorn();
+    public Date getDataLimitRetorn(){
+        return dataLimitRetorn;
+    }
     @Override
-    String tipusPrestec();
+    public abstract String tipusPrestec();
+
     @Override
-    void setRetornat(boolean retornat);
+    public void setRetornat(boolean retornat){this.retornat = retornat;}
     @Override
-    boolean getRetornat();
+    public boolean getRetornat(){
+        return retornat;
+    }
 
     /**
      * Retornar prestec. Llança excepció si el prestec ja es vaig retornar
      */
     @Override
-    void retorna();
+    public void retorna(){
+        //literalmente hace lo mismo que el setRetornat()????
+        if (retornat) throw new BiblioException("El prèstec ja ha sigut retornat");
+        setRetornat(true);
+    }
 
     /**
      * Retornar durada prestec. La durada del prestec depen del tipus de prestec
      */
     @Override
-    long duradaPrestec();
+    public abstract long duradaPrestec();
 
     /**
      * Retornar true si el prestec està endarrerit per a la data actual
      */
     @Override
-    boolean prestecEndarrerit();
+    public boolean prestecEndarrerit(){
+        Date dataActual = new Date();
+        long duradaActual = Math.abs(getDataCreacio().getTime() - dataActual.getTime());
+
+        if (duradaPrestec() < duradaActual){
+            return true;
+        }
+        else return false;
+    }
 
     @Override
-    String toString();
+    public String toString(){
+        return "Tipus = " + tipusPrestec() + ", Exemplar = " + getExemplar() + ", Usuari = " + getUsuari() + ", Data de creació = " + getDataCreacio() + ", Data límit retorn = " + getDataLimitRetorn() + ", Retornat = " + getRetornat();
+    }
 }

@@ -3,43 +3,43 @@ package prog2.model;
 import java.util.Date;
 
 public interface InPrestec {
-    void setExemplar(Exemplar exemplar);
+    public void setExemplar(Exemplar exemplar);
 
-    Exemplar getExemplar();
+    public Exemplar getExemplar();
 
-    void setUsuari(Usuari usuari);
+    public void setUsuari(Usuari usuari);
 
-    Usuari getUsuari();
+    public Usuari getUsuari();
 
-    void setDataCreacio(Date data);
+    public void setDataCreacio(Date data);
 
-    Date getDataCreacio();
+    public Date getDataCreacio();
 
-    void setDataLimitRetorn(Date data);
+    public void setDataLimitRetorn(Date data);
 
-    Date getDataLimitRetorn();
+    public Date getDataLimitRetorn();
 
-    String tipusPrestec();
+    public String tipusPrestec();
 
-    void setRetornat(boolean retornat);
+    public void setRetornat(boolean retornat);
 
-    boolean getRetornat();
+    public boolean getRetornat();
 
     /**
      * Retornar prestec. Llança excepció si el prestec ja es vaig retornar
      */
-    void retorna();
+    public void retorna();
 
     /**
      * Retornar durada prestec. La durada del prestec depen del tipus de prestec
      */
-    long duradaPrestec();
+    public long duradaPrestec();
 
     /**
      * Retornar true si el prestec està endarrerit per a la data actual
      */
-    boolean prestecEndarrerit();
+    public boolean prestecEndarrerit();
 
     @Override
-    String toString();
+    public String toString();
 }
