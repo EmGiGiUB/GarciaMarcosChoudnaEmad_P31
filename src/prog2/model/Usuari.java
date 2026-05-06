@@ -6,9 +6,6 @@ public abstract class Usuari implements InUsuari {
     private String adreca;
     private int numPrestecsNormals;
     private int numPrestecsLlargs;
-    private int maxPrestecsNormals;
-    private int maxPrestecsLlargs;
-    private String tipusUsuari;
 
     public Usuari(String email, String nom, String adreca) {
         this.email = email;
@@ -48,7 +45,7 @@ public abstract class Usuari implements InUsuari {
 
     @Override
     public String tipusUsuari() {
-        return tipusUsuari;
+        return "Usuari";
     }
 
     @Override
@@ -73,17 +70,17 @@ public abstract class Usuari implements InUsuari {
 
     @Override
     public int getMaxPrestecsNormals() {
-        return maxPrestecsNormals;
+        return 0;
     }
 
     @Override
     public int getMaxPrestecsLlargs() {
-        return maxPrestecsLlargs;
+        return 0;
     }
 
     @Override
     public String toString() {
-        return "Tipus = " + tipusUsuari + ", Email= " + email + ", Nom= " + nom + ", Adreca= " + adreca + ", Num. prestecs normals= " + numPrestecsNormals
+        return "Tipus = " + tipusUsuari() + ", Email= " + email + ", Nom= " + nom + ", Adreca= " + adreca + ", Num. prestecs normals= " + numPrestecsNormals
                 + ", Num. prestecs llargs= " + numPrestecsLlargs;
     }
 }

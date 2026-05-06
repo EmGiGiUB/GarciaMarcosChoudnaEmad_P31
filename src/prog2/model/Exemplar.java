@@ -1,23 +1,63 @@
 package prog2.model;
 
 public class Exemplar implements InExemplar {
-    @Override
-    void setId(String id);
-    @Override
-    String getId();
-    @Override
-    void setTitol(String titol);
-    @Override
-    String getTitol();
-    @Override
-    void setAutor(String autor);
-    @Override
-    String getAutor();
-    @Override
-    void setAdmetPrestecLlarg(boolean admetPrestecLlarg);
-    @Override
-    boolean getAdmetPrestecLlarg();
+    private String id;
+    private String autor;
+    private String titol;
+    private boolean admetPrestecLlarg;
+    private boolean isDisponible;
+
+    public Exemplar(String id, String autor, String titol, boolean admetPrestecLlarg_) {
+        this.id = id;
+        this.autor = autor;
+        this.titol = titol;
+        this.admetPrestecLlarg = admetPrestecLlarg_;
+    }
 
     @Override
-    String toString();
+    public void setId(String id) {
+        this.id = id;
+    }
+    @Override
+    public String getId() {
+        return id;
+    }
+    @Override
+    public void setTitol(String titol) {
+        this.titol = titol;
+    }
+    @Override
+    public String getTitol() {
+        return titol;
+    }
+    @Override
+    public void setAutor(String autor) {
+        this.autor = autor;
+    }
+    @Override
+    public String getAutor() {
+        return autor;
+    }
+    @Override
+    public void setAdmetPrestecLlarg(boolean admetPrestecLlarg) {
+        this.admetPrestecLlarg = admetPrestecLlarg;
+    }
+    @Override
+    public boolean getAdmetPrestecLlarg() {
+        return admetPrestecLlarg;
+    }
+
+    public boolean isDisponible() {
+        return isDisponible;
+    }
+
+    public void setDisponible(boolean disponible) {
+        this.isDisponible = disponible;
+    }
+
+    @Override
+    public String toString() {
+        return "Id=" + id + ", Titol=" + titol + ", Autor=" + autor + ", Admet Prestec Llarg=" + admetPrestecLlarg +
+                ", Disponible=" + isDisponible();
+    }
 }
