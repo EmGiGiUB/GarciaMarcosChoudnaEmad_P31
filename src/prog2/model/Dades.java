@@ -8,40 +8,23 @@ import java.util.Iterator;
 
 public class Dades implements InDades {
 
-    protected ArrayList<Exemplar> llistaExemplars = new ArrayList<>();
-    protected ArrayList<Usuari> llistaUsuaris = new ArrayList<>();
-    protected ArrayList<Prestec> llistaPrestecs = new ArrayList<>();
+    protected LlistaExemplars llistaExemplars = new LlistaExemplars();
+    protected LlistaUsuaris llistaUsuaris = new LlistaUsuaris();
+    protected LlistaPrestecs llistaPrestecs = new LlistaPrestecs();
     /**
      * Afegeix exemplar. Llança excepció si l'id ja existeix
      */
     @Override
     public void afegirExemplar(String id, String titol, String autor, boolean admetPrestecLlarg) throws BiblioException {
-        Iterator<Exemplar> iterator = llistaExemplars.iterator();
-
-        while(iterator.hasNext()){
-            Exemplar exemplarActual = iterator.next();
-            if(exemplarActual.getId().equals(id)){
-                throw new BiblioException("Un exemplar amb aquest ID ja està registrat");
-            }
-        }
-        new Exemplar(id, autor, titol, admetPrestecLlarg);
+        Exemplar miExemplar = new Exemplar(id, titol, autor, admetPrestecLlarg);
+        llistaExemplars.afegir(miExemplar);
     }
-
     /**
-     * Recuperar préstecs. Retorna un ArrayList amb tots els exemplars
+     * Recuperar exemplars. Retorna un ArrayList amb tots els exemplars
      */
     @Override
     public ArrayList<Exemplar> recuperaExemplars(){
-        //quiero entender que aquí hay un fallo, es decir, sera recuperar ejemplares
-        Iterator<Prestec> iterator = llistaPrestecs.iterator();
-
-        while(iterator.hasNext()){
-            Prestec prestecActual = iterator.next();
-            prestecActual.retorna();
-        }
-
-        ArrayList<Exemplar> exemplars = new ArrayList<>(llistaExemplars);
-        return exemplars;
+        return llistaExemplars.getArrayList();
     }
 
     /**
@@ -49,15 +32,14 @@ public class Dades implements InDades {
      */
     @Override
     public void afegirUsuari(String email, String nom, String adreca, boolean esEstudiant) throws BiblioException{
-        Iterator<Usuari> iterator = llistaUsuaris.iterator();
-
-        while(iterator.hasNext()){
-            Usuari usuariActual = iterator.next();
-            if(usuariActual.getEmail().equals(email)){
-                throw new BiblioException("Un usuari amb aquest email ja està registrat");
-            }
+        if (esEstudiant) {
+            Estudiant nuevoEstudiant = new Estudiant(email, nom, adreca);
+            llistaUsuaris.afegir(nuevoEstudiant);
+        } else {
+            Professor nuevoProfessor = new Professor(email, nom, adreca);
+            llistaUsuaris.afegir(nuevoProfessor);
         }
-        new Usuari(email, nom, adreca, esEstudiant);
+
     }
 
     /**
@@ -65,8 +47,25 @@ public class Dades implements InDades {
      */
     @Override
     public ArrayList<Usuari> recuperaUsuaris(){
-        ArrayList<Usuari> usuaris = new ArrayList<>(llistaUsuaris);
-        return usuaris;
+        return llistaUsuaris.getArrayList();
+    }
+
+    public boolean prestecsEndarrerits (Usuari usuari) {
+        //Obtenemos el iterator de la copia de la lista Prestecs.
+        Iterator <Prestec> miIterator = llistaPrestecs.getArrayList().iterator();
+        while (miIterator.hasNext()) {
+            Prestec prestec = miIterator.next();
+
+            //La recorremos buscando si algún préstamo tiene el mismo usuario comparando por email.
+            if (prestec.getUsuari().getEmail().equals(usuari.getEmail())) {
+
+                //Si el préstamo está atrasado, devolvemos true.
+                if (prestec.prestecEndarrerit()) {
+                    return true;
+                }
+            }
+        }
+        return false; //En caso contrario devolvemos false.
     }
 
     /**
@@ -77,18 +76,36 @@ public class Dades implements InDades {
 
     @Override
     public void afegirPrestec(int exemplarPos, int usuariPos, boolean esLlarg) throws BiblioException{
-        if (exemplarPos < 0 || usuariPos < 0){
-            throw new BiblioException("L'índex donat no és correcte.");
+        Exemplar miExemplar = llistaExemplars.getAt(exemplarPos);
+        Usuari miUsuari = llistaUsuaris.getAt(usuariPos);
+
+        if (!miExemplar.isDisponible()) {
+            throw new BiblioException("ERROR: L'exemplar ja està prestat.");
+        } else if (!miExemplar.getAdmetPrestecLlarg() && esLlarg) {
+            throw new BiblioException("ERROR: L'exemplar no admet un préstec de llarg termini.");
+        } else if (prestecsEndarrerits(miUsuari)) {
+            throw new BiblioException("ERROR: Té préstecs endarrerits.");
+        } else if (!esLlarg && miUsuari.getNumPrestecsNormals() >= miUsuari.getMaxPrestecsNormals()) {
+            throw new BiblioException("ERROR: L'usuari ha assolit el límit de préstecs normals.");
+        } else if ((esLlarg && miUsuari.getNumPrestecsLlargs() >= miUsuari.getMaxPrestecsLlargs())) {
+            throw new BiblioException("ERROR: L'usuari ha assolit el límit de préstecs llargs.");
+        } else {
+            Prestec nuevoPrestec;
+            Date dataActual = new Date();
+            if (esLlarg) {
+                nuevoPrestec = new PrestecLlarg(miExemplar, miUsuari, dataActual);
+                miUsuari.setNumPrestecsLlargs(miUsuari.getNumPrestecsLlargs() + 1);
+            } else {
+                nuevoPrestec = new PrestecNormal(miExemplar, miUsuari, dataActual);
+                miUsuari.setNumPrestecsNormals(miUsuari.getNumPrestecsNormals() + 1);
+            }
+            miExemplar.setDisponible(false);
+            llistaPrestecs.afegir(nuevoPrestec);
+
         }
-        if (llistaUsuaris.isEmpty() || llistaExemplars.isEmpty()){
-            throw new BiblioException("No es pot accedir a l'index ja que les llistes estan buides.");
-        }
-        Date dataActual = new Date();
-        if (esLlarg) {
-            new PrestecLlarg(llistaExemplars.get(exemplarPos), llistaUsuaris.get(usuariPos), dataActual);
-        }
-        else new PrestecNormal(llistaExemplars.get(exemplarPos), llistaUsuaris.get(usuariPos), dataActual);
     }
+
+
 
     /**
      * Retornar préstec. Llança excepció si el prestec ja es vaig retornar.
@@ -99,7 +116,21 @@ public class Dades implements InDades {
         if (llistaPrestecs.isEmpty()){
             throw new BiblioException("No hi ha préstecs per retornar.");
         }
-        llistaPrestecs.get(position).retorna();
+        if (position < 0 || position >= llistaPrestecs.getSize()) {
+            throw new BiblioException("ERROR: Posició de préstec no vàlida.");
+        }
+        Prestec miPrestec = llistaPrestecs.getAt(position);
+        Usuari usuari = miPrestec.getUsuari();
+        miPrestec.retorna();
+
+        //Establecemos el estado del ejemplar de nuevo en disponible.
+        miPrestec.getExemplar().setDisponible(true);
+
+        if (miPrestec.tipusPrestec().equalsIgnoreCase("Llarg")) {
+            usuari.setNumPrestecsLlargs(usuari.getNumPrestecsLlargs() - 1);
+        } else {
+            usuari.setNumPrestecsNormals(usuari.getNumPrestecsNormals() - 1);
+        }
     }
 
     /**
@@ -107,8 +138,7 @@ public class Dades implements InDades {
      */
     @Override
     public ArrayList<Prestec> recuperaPrestecs(){
-        ArrayList<Prestec> prestecs = new ArrayList<>(llistaPrestecs);
-        return prestecs;
+        return llistaPrestecs.getArrayList();
     }
 
     /**
@@ -116,16 +146,16 @@ public class Dades implements InDades {
      */
     @Override
     public ArrayList<Prestec> recuperaPrestecsNoRetornats(){
-        ArrayList<Prestec> prestecsNoRetornats = new ArrayList<>();
-        Iterator<Prestec> iterator = llistaPrestecs.iterator();
 
-        while(iterator.hasNext()){
-            Prestec prestecActual = iterator.next();
-            if (!prestecActual.retornat){
-                prestecsNoRetornats.add(prestecActual);
+        Iterator<Prestec> iterator = llistaPrestecs.getArrayList().iterator();
+        ArrayList<Prestec> p = new ArrayList<>();
+        while (iterator.hasNext()) {
+            Prestec prestec = iterator.next();
+            if (!prestec.getRetornat()) {
+                p.add(prestec);
             }
         }
-        return prestecsNoRetornats;
+        return p;
     }
 }
 

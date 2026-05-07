@@ -11,6 +11,8 @@ public abstract class Usuari implements InUsuari {
         this.email = email;
         this.nom = nom;
         this.adreca = adreca;
+        this.numPrestecsLlargs = 0;
+        this.numPrestecsNormals = 0;
     }
 
     @Override

@@ -77,12 +77,9 @@ public abstract class Prestec implements InPrestec{
     @Override
     public boolean prestecEndarrerit(){
         Date dataActual = new Date();
-        long duradaActual = Math.abs(getDataCreacio().getTime() - dataActual.getTime());
+        long duradaActual = dataActual.getTime() - dataCreacio.getTime();
 
-        if (duradaPrestec() < duradaActual){
-            return true;
-        }
-        else return false;
+        return !retornat && (duradaActual > duradaPrestec());
     }
 
     @Override
