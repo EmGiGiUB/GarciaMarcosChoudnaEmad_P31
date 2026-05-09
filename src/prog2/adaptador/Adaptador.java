@@ -1,30 +1,38 @@
 package prog2.adaptador;
 import prog2.model.Dades;
 import prog2.vista.BiblioException;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.ObjectOutputStream;
+import java.io.*;
 
 public class Adaptador {
 
     private Dades dades;
 
-    public void guardaDades(String camiDesti) throws BiblioException{
-        String llistaExemplars = dades.recuperaExemplars().toString();
-        String llistaUsuaris = dades.recuperaUsuaris().toString();
-        String llistaPrestecs = dades.recuperaPrestecs().toString();
+    public Adaptador(){
+        this.dades = new Dades();
+    }
 
+    public void guardaDades(String camiDesti) throws BiblioException {
         File fitxer = new File(camiDesti);
-        FileOutputStream fout = new FileOutputStream(fitxer);
-        ObjectOutputStream oos = new ObjectOutputStream(fout);
-        oos.writeObject(llistaExemplars);
 
+        try (FileOutputStream fout = new FileOutputStream(fitxer);
+             ObjectOutputStream oos = new ObjectOutputStream(fout)) {
+             oos.writeObject(dades);
 
+        } catch (IOException e) {
+            throw new BiblioException("Error en guardar las dades: " + e.getMessage());
+        }
     }
-            ;
+
     public void carregaDades(String camiOrigen) throws BiblioException {
+        File fitxer = new File(camiOrigen);
+
+        try (FileInputStream fin = new FileInputStream(fitxer);
+             ObjectInputStream ois = new ObjectInputStream(fin)) {
+
+            dades = (Dades) ois.readObject();
+
+        } catch (IOException | ClassNotFoundException e) {
+            throw new BiblioException("Error en carregar les dades: " + e.getMessage());
+        }
     }
-
-
 }
