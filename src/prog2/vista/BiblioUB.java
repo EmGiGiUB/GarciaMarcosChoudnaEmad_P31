@@ -146,6 +146,28 @@ public class BiblioUB {
     }
     
     private void menuGestioExemplars(Scanner sc) {
+        adaptador.carregaDades();
+
+        Menu<OpcionsMenuGestioExemplars> menu = new Menu<>("Menu gestió d'exemplars", OpcionsMenuGestioExemplars.values());
+
+        menu.setDescripcions(descMenuGestioExemplars);
+
+        OpcionsMenuGestioExemplars opcio;
+
+        do{
+            menu.mostrarMenu();
+            opcio = menu.getOpcio(sc);
+
+            switch (opcio){
+                case MENU_GESTIO_EXEMPLARS_ADD:
+                    afegirExemplar(sc);
+                    break;
+
+                case MENU_GESTIO_EXEMPLARS_VIEW:
+
+
+            }
+        }
     }
     
     /**
