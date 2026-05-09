@@ -5,6 +5,7 @@
  */
 package prog2.vista;
 
+import java.io.File;
 import java.util.List;
 import java.util.Scanner;
 import prog2.adaptador.Adaptador;
@@ -146,7 +147,7 @@ public class BiblioUB {
     }
     
     private void menuGestioExemplars(Scanner sc) {
-        adaptador.carregaDades();
+        adaptador.carregaDades(getFilePath(sc, true));
 
         Menu<OpcionsMenuGestioExemplars> menu = new Menu<>("Menu gestió d'exemplars", OpcionsMenuGestioExemplars.values());
 
@@ -164,10 +165,13 @@ public class BiblioUB {
                     break;
 
                 case MENU_GESTIO_EXEMPLARS_VIEW:
+                    break;
 
+                case MENU_GESTIO_EXEMPLARS_EXIT:
+                    break;
 
             }
-        }
+        } while (opcio != OpcionsMenuGestioExemplars.MENU_GESTIO_EXEMPLARS_EXIT);
     }
     
     /**
@@ -176,9 +180,35 @@ public class BiblioUB {
      */
     
     private void afegirExemplar(Scanner sc){
+        adaptador.carregaDades(getFilePath(sc, true));
+
+        
     }
 
     private void menuGestioUsuaris(Scanner sc) {
+        adaptador.carregaDades(getFilePath(sc, true));
+
+        Menu<OpcionsMenuGestioClients> menu = new Menu<>("Menu gestió d'clients", OpcionsMenuGestioClients.values());
+
+        menu.setDescripcions(descMenuGestioUsuaris);
+
+        OpcionsMenuGestioClients opcio;
+
+        do {
+            menu.mostrarMenu();
+            opcio = menu.getOpcio(sc);
+            switch (opcio) {
+                case MENU_GESTIO_USUARIS_ADD:
+                    afegirUsuari(sc);
+                    break;
+
+                case MENU_GESTIO_USUARIS_VIEW:
+                    break;
+
+                case MENU_GESTIO_USUARIS_EXIT:
+                    break;
+            }
+        } while (opcio != OpcionsMenuGestioClients.MENU_GESTIO_USUARIS_EXIT);
     }
     
     /**
@@ -190,13 +220,35 @@ public class BiblioUB {
     }
 
     private void menuGestioPrestecs(Scanner sc) {
+        adaptador.carregaDades(getFilePath(sc, true));
+        Menu<OpcionsMenuGestioPrestecs> menu = new Menu<>("Menu gestió d'Prestecs", OpcionsMenuGestioPrestecs.values());
+
+        OpcionsMenuGestioPrestecs opcio;
+
+        do {
+            menu.mostrarMenu();
+            opcio = menu.getOpcio(sc);
+
+            switch (opcio) {
+                case MENU_GESTIO_PRESTECS_ADD:
+                    break;
+                case MENU_GESTIO_PRESTECS_REMOVE:
+                    break;
+                case MENU_GESTIO_PRESTECS_VIEW:
+                    break;
+                case MENU_GESTIO_PRESTECS_EXIT:
+                    break;
+
+            }
+        } while(opcio != OpcionsMenuGestioPrestecs.MENU_GESTIO_PRESTECS_EXIT);
+
     }
     
     /**
      * Afegir un nou prestec
      * @param sc
      */
-    
+
     private void afegirPrestec(Scanner sc){
     }
 
@@ -228,19 +280,25 @@ public class BiblioUB {
      */
     private String getFilePath(Scanner sc, boolean mustExist) {
         String filePath = null;
+        boolean existe = false;
 
-        // Mostrar el missatge demanant la entrada
-        System.out.println("Entra ruta completa fitxer (o ENTER per ometre):");
-
-            // Llegim la ruta del fitxer
+        while (!existe) {
+            System.out.println("Entra ruta completa fitxer (o ENTER per ometre):");
             filePath = sc.nextLine();
 
-            // Si la ruta està buida retornem un null
-            if(filePath.isEmpty()) {
-                return null;
+            if (filePath.isEmpty()) return null;
+
+            if (mustExist) {
+                File info = new File(filePath);
+                if (info.exists() && info.isFile()) {
+                    existe = true;
+                } else {
+                    System.out.println("ERROR: El fitxer no existeix. Torna a intentar-ho");
+                }
+            } else {
+                existe = true;
+                }
             }
-
         return filePath;
+        }
     }
-
-}
