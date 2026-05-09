@@ -2,11 +2,12 @@ package prog2.model;
 
 import prog2.vista.BiblioException;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
 
-public class Dades implements InDades {
+public class Dades implements InDades, Serializable {
 
     protected LlistaExemplars llistaExemplars = new LlistaExemplars();
     protected LlistaUsuaris llistaUsuaris = new LlistaUsuaris();
