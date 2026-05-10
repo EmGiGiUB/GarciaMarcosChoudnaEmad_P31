@@ -6,9 +6,14 @@
 package prog2.vista;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 import prog2.adaptador.Adaptador;
+import prog2.model.Exemplar;
+import prog2.model.LlistaExemplars;
+import prog2.model.Prestec;
+import prog2.model.Usuari;
 
 /**
  *
@@ -95,7 +100,7 @@ public class BiblioUB {
             menu.mostrarMenu();
             opcio = menu.getOpcio(sc);
 
-            // Fem les accions necessàries per a la opció triada
+            // Fem les accions necessàries per a l'opció triada
             switch(opcio) {
                 case MENU_PRINCIPAL_EXEMPLARS:
                     // Mostra el menú per a la gestió d'exemplars
@@ -139,7 +144,7 @@ public class BiblioUB {
                     }     
                     break;
                 case MENU_PRINCIPAL_EXIT:
-                    // Sortir      1
+                    // sortir      1
                     System.err.println("Sortint de l'aplicació...");
                     break;
             }
@@ -147,7 +152,6 @@ public class BiblioUB {
     }
     
     private void menuGestioExemplars(Scanner sc) {
-        adaptador.carregaDades(getFilePath(sc, true));
 
         Menu<OpcionsMenuGestioExemplars> menu = new Menu<>("Menu gestió d'exemplars", OpcionsMenuGestioExemplars.values());
 
@@ -165,6 +169,7 @@ public class BiblioUB {
                     break;
 
                 case MENU_GESTIO_EXEMPLARS_VIEW:
+                    listarExemplars();
                     break;
 
                 case MENU_GESTIO_EXEMPLARS_EXIT:
@@ -180,13 +185,42 @@ public class BiblioUB {
      */
     
     private void afegirExemplar(Scanner sc){
-        adaptador.carregaDades(getFilePath(sc, true));
+        String titol;
+        String autor;
+        String id;
+        String admetPrestecLlarg;
+        System.out.println("Introduce el título del libro: ");
+        titol = sc.nextLine();
+        System.out.println("Introduce el nombre del autor: ");
+        autor = sc.nextLine();
+        System.out.println("Introduce el id numérico: ");
+        id = sc.nextLine();
+        System.out.println("¿Admite préstamo de largo termino? (si o no)");
+        admetPrestecLlarg = sc.nextLine();
 
-        
+        if (admetPrestecLlarg.equalsIgnoreCase("si")) {
+            adaptador.afegirExemplar(id, autor, titol, true);
+        } else {
+            adaptador.afegirExemplar(id, autor, titol, false);
+        }
+    }
+
+    private void listarExemplars () {
+        ArrayList<Exemplar> llista = adaptador.mostarExemplars();
+
+        if (llista.isEmpty()) {
+            System.out.println("No hay ejemplares para mostrar.");
+            return;
+        }
+        List<String> toStringExemplars = new ArrayList<>();
+
+        for (Exemplar e : llista) {
+            toStringExemplars.add(e.toString());
+        }
+        showList("LLISTA D'EXEMPLARS", toStringExemplars);
     }
 
     private void menuGestioUsuaris(Scanner sc) {
-        adaptador.carregaDades(getFilePath(sc, true));
 
         Menu<OpcionsMenuGestioClients> menu = new Menu<>("Menu gestió d'clients", OpcionsMenuGestioClients.values());
 
@@ -203,6 +237,7 @@ public class BiblioUB {
                     break;
 
                 case MENU_GESTIO_USUARIS_VIEW:
+                  listarUsuaris();
                     break;
 
                 case MENU_GESTIO_USUARIS_EXIT:
@@ -217,6 +252,44 @@ public class BiblioUB {
      */
     
     private void afegirUsuari(Scanner sc){
+        String nom;
+        String email;
+        String adreca;
+        String isEstudiant;
+
+        System.out.println("Introduce el nombre del usuario: ");
+        nom = sc.nextLine();
+        System.out.println("Introduce el email: ");
+        email = sc.nextLine();
+        System.out.println("Introduce la dirección: ");
+        adreca = sc.nextLine();
+        System.out.println("¿El cliente/usuario es estudiant? (si o no)");
+        isEstudiant = sc.nextLine();
+        try {
+            if (isEstudiant.equalsIgnoreCase(("si"))) {
+                adaptador.afegirUsuari(email, nom, adreca, true);
+            } else {
+                adaptador.afegirUsuari(email, nom, adreca, false);
+            }
+        } catch (BiblioException e) {
+            System.out.println(e.getMessage());
+        }
+    }
+    private void listarUsuaris() {
+        // 1. Pedimos la lista al adaptador
+        ArrayList<Usuari> llista = adaptador.mostrarUsuaris();
+        if (llista.isEmpty()) {
+            System.out.println("No hay ningun usuario registrado.");
+            return;
+        }
+        // 2. Preparamos la lista de Strings para el formato
+        List<String> toStringUsuaris = new ArrayList<>();
+        for (Usuari u : llista) {
+            toStringUsuaris.add(u.toString());
+        }
+
+        // 3. Usamos el metodo para mostrar la lista.
+        showList("LLISTA D'USUARIS", toStringUsuaris);
     }
 
     private void menuGestioPrestecs(Scanner sc) {
@@ -231,10 +304,13 @@ public class BiblioUB {
 
             switch (opcio) {
                 case MENU_GESTIO_PRESTECS_ADD:
+                    afegirPrestec(sc);
                     break;
                 case MENU_GESTIO_PRESTECS_REMOVE:
+                    retornaPrestec(sc);
                     break;
                 case MENU_GESTIO_PRESTECS_VIEW:
+                    listarPrestecs();
                     break;
                 case MENU_GESTIO_PRESTECS_EXIT:
                     break;
@@ -245,14 +321,70 @@ public class BiblioUB {
     }
     
     /**
-     * Afegir un nou prestec
+     * Afegir un nou préstec
      * @param sc
      */
 
     private void afegirPrestec(Scanner sc){
+        int exemplarPos;
+        int usuariPos;
+        String esLlarg;
+
+        listarExemplars();
+        System.out.println("¿Qué ejemplar va a ser prestado? (Introduce el número): ");
+        exemplarPos = sc.nextInt();
+        listarUsuaris();
+        System.out.println("¿A qué usuario desea añadirle el préstamo? (Introduzca el número): ");
+        usuariPos = sc.nextInt();
+        sc.nextLine();
+        System.out.println("¿Es un préstamo de largo termino? (sí o no): ");
+        esLlarg = sc.nextLine();
+        try {
+            if (esLlarg.equalsIgnoreCase("si")) {
+                adaptador.afegirPrestec(exemplarPos, usuariPos, true);
+            } else {
+                adaptador.afegirPrestec(exemplarPos, usuariPos, false);
+            }
+            System.out.println("Préstec realitzat correctament.");
+        } catch (BiblioException e) {
+            System.out.println(e.getMessage());
+        } catch (Exception e) {
+            System.out.println(new BiblioException("ERROR: Dada introduida no valida.").getMessage());
+            sc.nextLine();
+        }
     }
 
-    private void cancelarPrestec(Scanner sc){
+    private void listarPrestecs () {
+        // 1. Pedimos la lista al adaptador
+        ArrayList<Prestec> llista = adaptador.mostrarPrestecs();
+        if (llista.isEmpty()) {
+            System.out.println("No hay ningun usuario registrado.");
+            return;
+        }
+        // 2. Preparamos la lista de Strings para el formato
+        List<String> toStringUsuaris = new ArrayList<>();
+        for (Prestec u : llista) {
+            toStringUsuaris.add(u.toString());
+        }
+
+        // 3. Usamos el método de apoyo que ya tienes
+        showList("LLISTA D'PRESTECS", toStringUsuaris);
+    }
+
+    private void retornaPrestec(Scanner sc){
+        listarPrestecs(); // Muestra todos los préstamos con su índice [i]
+        if (/*si la lista estaba vacía, el método listar ya habrá hecho el return*/)
+
+            System.out.println("Selecciona el número del préstamo a retornar: ");
+        try {
+            int pos = Integer.parseInt(sc.nextLine()); // Usando el truco de la línea completa
+            adaptador.retornarPrestec(pos);
+            System.out.println("Libro devuelto con éxito.");
+        } catch (BiblioException e) {
+            System.out.println(e.getMessage());
+        } catch (Exception e) {
+            System.out.println("ERROR: Selección no válida.");
+        }
     }
 
      /**

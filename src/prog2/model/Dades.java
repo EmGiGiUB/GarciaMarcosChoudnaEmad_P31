@@ -16,8 +16,8 @@ public class Dades implements InDades, Serializable {
      * Afegeix exemplar. Llança excepció si l'id ja existeix
      */
     @Override
-    public void afegirExemplar(String id, String titol, String autor, boolean admetPrestecLlarg) throws BiblioException {
-        Exemplar miExemplar = new Exemplar(id, titol, autor, admetPrestecLlarg);
+    public void afegirExemplar(String id, String autor, String titol, boolean admetPrestecLlarg) throws BiblioException {
+        Exemplar miExemplar = new Exemplar(id, autor, titol, admetPrestecLlarg);
         llistaExemplars.afegir(miExemplar);
     }
     /**

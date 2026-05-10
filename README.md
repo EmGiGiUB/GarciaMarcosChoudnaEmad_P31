@@ -17,3 +17,6 @@ FALTA:
 -- Quizá corregir alguna cosa. /Emad: esperemos que poco.
 
 -- Para resumir, faltan los tests y los 4 métodos para que se cumplan todas las funciones del menu del programa. Todo esto en BiblioUb.
+
+
+Proyecto casi terminado, faltan los test y tratar alguna excepcion que otra en Dades,BiblioUb o Llista.

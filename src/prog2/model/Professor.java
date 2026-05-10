@@ -5,6 +5,8 @@ import java.io.Serializable;
 public class Professor extends Usuari implements Serializable {
     public Professor(String email, String nom, String adreca) {
         super(email, nom, adreca);
+        setNumPrestecsLlargs(2);
+        setNumPrestecsNormals(2);
     }
 
     @Override

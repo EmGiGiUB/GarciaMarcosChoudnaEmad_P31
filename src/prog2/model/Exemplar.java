@@ -14,6 +14,7 @@ public class Exemplar implements InExemplar, Serializable {
         this.autor = autor;
         this.titol = titol;
         this.admetPrestecLlarg = admetPrestecLlarg_;
+        this.isDisponible = true;
     }
 
     @Override
