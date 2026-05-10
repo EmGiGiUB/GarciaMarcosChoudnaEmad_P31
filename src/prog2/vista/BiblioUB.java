@@ -173,6 +173,7 @@ public class BiblioUB {
                     break;
 
                 case MENU_GESTIO_EXEMPLARS_EXIT:
+                    System.out.println("Volviendo al menú principal...");
                     break;
 
             }
@@ -241,6 +242,7 @@ public class BiblioUB {
                     break;
 
                 case MENU_GESTIO_USUARIS_EXIT:
+                    System.out.println("Volviendo al menú principal...");
                     break;
             }
         } while (opcio != OpcionsMenuGestioClients.MENU_GESTIO_USUARIS_EXIT);
@@ -293,7 +295,6 @@ public class BiblioUB {
     }
 
     private void menuGestioPrestecs(Scanner sc) {
-        adaptador.carregaDades(getFilePath(sc, true));
         Menu<OpcionsMenuGestioPrestecs> menu = new Menu<>("Menu gestió d'Prestecs", OpcionsMenuGestioPrestecs.values());
 
         OpcionsMenuGestioPrestecs opcio;
@@ -313,6 +314,7 @@ public class BiblioUB {
                     listarPrestecs();
                     break;
                 case MENU_GESTIO_PRESTECS_EXIT:
+                    System.out.println("Volviendo al menú principal...");
                     break;
 
             }
@@ -326,6 +328,18 @@ public class BiblioUB {
      */
 
     private void afegirPrestec(Scanner sc){
+        ArrayList<Usuari> llistaUs = adaptador.mostrarUsuaris();
+        ArrayList<Exemplar> llistaEx = adaptador.mostarExemplars();
+
+        if (llistaEx.isEmpty()) {
+            System.out.println("No se puede realizar un préstamo, no hay ejemplares disponibles.");
+            return;
+        } else if (llistaUs.isEmpty()) {
+            System.out.println("No se puede realizar un préstamo, no hay usuarios registrados.");
+            return;
+        }
+
+
         int exemplarPos;
         int usuariPos;
         String esLlarg;
@@ -355,29 +369,30 @@ public class BiblioUB {
     }
 
     private void listarPrestecs () {
-        // 1. Pedimos la lista al adaptador
+        //Pedimos la lista al adaptador
         ArrayList<Prestec> llista = adaptador.mostrarPrestecs();
         if (llista.isEmpty()) {
-            System.out.println("No hay ningun usuario registrado.");
+            System.out.println("No hay ningun préstamo para mostrar.");
             return;
         }
-        // 2. Preparamos la lista de Strings para el formato
+        //Preparamos la lista de Strings para el formato
         List<String> toStringUsuaris = new ArrayList<>();
         for (Prestec u : llista) {
             toStringUsuaris.add(u.toString());
         }
-
-        // 3. Usamos el método de apoyo que ya tienes
         showList("LLISTA D'PRESTECS", toStringUsuaris);
     }
 
     private void retornaPrestec(Scanner sc){
+        ArrayList<Prestec> llista = adaptador.mostrarPrestecs();
+        if (llista.isEmpty()) {
+            System.out.println("No hay ningún préstamo para devolver");
+            return;
+        }
         listarPrestecs(); // Muestra todos los préstamos con su índice [i]
-        if (/*si la lista estaba vacía, el método listar ya habrá hecho el return*/)
-
             System.out.println("Selecciona el número del préstamo a retornar: ");
         try {
-            int pos = Integer.parseInt(sc.nextLine()); // Usando el truco de la línea completa
+            int pos = Integer.parseInt(sc.nextLine());
             adaptador.retornarPrestec(pos);
             System.out.println("Libro devuelto con éxito.");
         } catch (BiblioException e) {
