@@ -26,10 +26,10 @@ class AdaptadorTest {
     @Test
     void afegirExemplar() {
         adaptador.afegirExemplar("101", "Cervantes", "Quijote", true);
-        ArrayList<Exemplar> llista = adaptador.mostarExemplars();
+        ArrayList<Exemplar> llista = adaptador.mostrarExemplars();
 
         assertEquals(1, llista.size(), "La llista hauria de tenir 1 exemplar");
-        assertEquals("Quijote", llista.get(0).getTitol());
+        assertEquals("Cervantes", llista.get(0).getTitol());
     }
 
     @Test
@@ -64,7 +64,7 @@ class AdaptadorTest {
 
     @Test
     void guardaICarregaDades(@TempDir Path tempDir) throws BiblioException {
-        adaptador.afegirExemplar("EXT-01", "Tolkien", "El Hobbit", true);
+        adaptador.afegirExemplar("EXT-01", "El Hobbit", "Tolkien", true);
 
         File fitxerTemp = tempDir.resolve("dades_test.dat").toFile();
         String cami = fitxerTemp.getAbsolutePath();
@@ -75,16 +75,16 @@ class AdaptadorTest {
         Adaptador nouAdaptador = new Adaptador();
         nouAdaptador.carregaDades(cami);
 
-        ArrayList<Exemplar> exemplarsRecuperats = nouAdaptador.mostarExemplars();
+        ArrayList<Exemplar> exemplarsRecuperats = nouAdaptador.mostrarExemplars();
         assertEquals(1, exemplarsRecuperats.size());
-        assertEquals("El Hobbit", exemplarsRecuperats.get(0).getTitol());
+        assertEquals("El Hobbit", exemplarsRecuperats.getFirst().getTitol());
     }
 
     @Test
     void mostarExemplars() {
-        assertTrue(adaptador.mostarExemplars().isEmpty(), "Al principi ha d'estar buida");
+        assertTrue(adaptador.mostrarExemplars().isEmpty(), "Al principi ha d'estar buida");
         adaptador.afegirExemplar("ID", "A", "T", false);
-        assertFalse(adaptador.mostarExemplars().isEmpty());
+        assertFalse(adaptador.mostrarExemplars().isEmpty());
     }
 
     @Test

@@ -126,7 +126,7 @@ public class DadesTest {
     }
 
     @Test
-    public void testAfegirPrestecSuperaLimitNormalsEstudiantLlançaExcepcio() throws BiblioException {
+    public void testAfegirPrestecSuperaLimitNormalsEstudiantLlancaExcepcio() throws BiblioException {
         // Estudiant: màxim 2 préstecs normals
         dades.afegirExemplar("001", "T1", "A1", false);
         dades.afegirExemplar("002", "T2", "A2", false);
@@ -139,7 +139,7 @@ public class DadesTest {
     }
 
     @Test
-    public void testAfegirPrestecSuperaLimitLlargsEstudiantLlançaExcepcio() throws BiblioException {
+    public void testAfegirPrestecSuperaLimitLlargsEstudiantLlancaExcepcio() throws BiblioException {
         // Estudiant: màxim 1 préstec llarg
         dades.afegirExemplar("001", "T1", "A1", true);
         dades.afegirExemplar("002", "T2", "A2", true);
@@ -150,20 +150,19 @@ public class DadesTest {
     }
 
     @Test
-    public void testAfegirPrestecUsuariAmbPrestecsEndarreritsLlançaExcepcio() throws BiblioException {
+    public void testAfegirPrestecUsuariAmbPrestecsEndarreritsLlancaExcepcio() throws BiblioException {
         // Creem un préstec amb data de creació molt antiga perquè estigui endarrerit
         dades.afegirExemplar("001", "T1", "A1", false);
         dades.afegirUsuari("est@ub.edu", "Anna", "Carrer 1", true);
         dades.afegirPrestec(0, 0, false);
 
         // Manipulem la data límit del préstec perquè estigui endarrerit
-        Prestec p = dades.recuperaPrestecs().get(0);
+        Prestec p = dades.recuperaPrestecs().getFirst();
         p.setDataLimitRetorn(new java.util.Date(System.currentTimeMillis() - 10_000L));
 
         // Ara intentem fer un nou préstec amb un segon exemplar
         dades.afegirExemplar("002", "T2", "A2", false);
-        assertThrows(BiblioException.class,
-            () -> dades.afegirPrestec(1, 0, false));
+        assertThrows(BiblioException.class, () -> dades.afegirPrestec(1, 0, false));
     }
 
     // -------------------------------------------------------

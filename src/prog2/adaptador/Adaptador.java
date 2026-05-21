@@ -40,11 +40,11 @@ public class Adaptador {
         }
     }
 
-    public void afegirExemplar (String id, String autor, String titol, boolean prestecLlarg) {
-       dades.afegirExemplar(id, autor, titol, prestecLlarg);
+    public void afegirExemplar (String id, String titol, String autor, boolean prestecLlarg) {
+       dades.afegirExemplar(id, titol, autor, prestecLlarg);
     }
 
-    public ArrayList<Exemplar> mostarExemplars () {
+    public ArrayList<Exemplar> mostrarExemplars () {
         return dades.recuperaExemplars();
     }
 

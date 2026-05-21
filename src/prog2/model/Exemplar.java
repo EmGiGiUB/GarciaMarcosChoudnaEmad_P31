@@ -9,10 +9,10 @@ public class Exemplar implements InExemplar, Serializable {
     private boolean admetPrestecLlarg;
     private boolean isDisponible;
 
-    public Exemplar(String id, String autor, String titol, boolean admetPrestecLlarg_) {
+    public Exemplar(String id, String titol, String autor, boolean admetPrestecLlarg_) {
         this.id = id;
-        this.autor = autor;
         this.titol = titol;
+        this.autor = autor;
         this.admetPrestecLlarg = admetPrestecLlarg_;
         this.isDisponible = true;
     }

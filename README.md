@@ -6,8 +6,6 @@
     MARCOS: Dades prestec
     EMAD: exemplar usuari llista 
 
-
-
 FALTA:
 
 -- Tests de BiblioUB y adaptador

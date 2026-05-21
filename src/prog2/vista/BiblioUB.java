@@ -200,14 +200,14 @@ public class BiblioUB {
         admetPrestecLlarg = sc.nextLine();
 
         if (admetPrestecLlarg.equalsIgnoreCase("si")) {
-            adaptador.afegirExemplar(id, autor, titol, true);
+            adaptador.afegirExemplar(id, titol, autor, true);
         } else {
-            adaptador.afegirExemplar(id, autor, titol, false);
+            adaptador.afegirExemplar(id, titol, autor, false);
         }
     }
 
     private void listarExemplars () {
-        ArrayList<Exemplar> llista = adaptador.mostarExemplars();
+        ArrayList<Exemplar> llista = adaptador.mostrarExemplars();
 
         if (llista.isEmpty()) {
             System.out.println("No hay ejemplares para mostrar.");
@@ -329,7 +329,7 @@ public class BiblioUB {
 
     private void afegirPrestec(Scanner sc){
         ArrayList<Usuari> llistaUs = adaptador.mostrarUsuaris();
-        ArrayList<Exemplar> llistaEx = adaptador.mostarExemplars();
+        ArrayList<Exemplar> llistaEx = adaptador.mostrarExemplars();
 
         if (llistaEx.isEmpty()) {
             System.out.println("No se puede realizar un préstamo, no hay ejemplares disponibles.");

@@ -3,6 +3,7 @@ package prog2.model;
 import prog2.vista.BiblioException;
 
 import java.io.Serializable;
+import java.security.KeyStore;
 import java.util.Date;
 
 public abstract class Prestec implements InPrestec, Serializable {
@@ -60,10 +61,18 @@ public abstract class Prestec implements InPrestec, Serializable {
      * Retornar prestec. Llança excepció si el prestec ja es vaig retornar
      */
     @Override
-    public void retorna(){
+    public void retorna() throws BiblioException{
         //literalmente hace lo mismo que el setRetornat()????
         if (retornat) throw new BiblioException("El prèstec ja ha sigut retornat");
         setRetornat(true);
+        //Decrementamos el número de prestamos.
+        if (tipusPrestec().equalsIgnoreCase("Llarg")) {
+        usuari.setNumPrestecsLlargs(usuari.getNumPrestecsLlargs()-1);
+        } else if (tipusPrestec().equalsIgnoreCase("Normal")) {
+            usuari.setNumPrestecsNormals(usuari.getNumPrestecsNormals() - 1);
+        }
+        //Volvemos a poner el ejemplar en disponible porque ya se a devuelto.
+        exemplar.setDisponible(true);
     }
 
     /**
@@ -77,10 +86,9 @@ public abstract class Prestec implements InPrestec, Serializable {
      */
     @Override
     public boolean prestecEndarrerit(){
+        if (retornat) return false;
         Date dataActual = new Date();
-        long duradaActual = dataActual.getTime() - dataCreacio.getTime();
-
-        return !retornat && (duradaActual > duradaPrestec());
+        return dataActual.after(dataLimitRetorn);
     }
 
     @Override

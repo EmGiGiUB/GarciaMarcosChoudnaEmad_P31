@@ -124,14 +124,6 @@ public class Dades implements InDades, Serializable {
         Usuari usuari = miPrestec.getUsuari();
         miPrestec.retorna();
 
-        //Establecemos el estado del ejemplar de nuevo en disponible.
-        miPrestec.getExemplar().setDisponible(true);
-
-        if (miPrestec.tipusPrestec().equalsIgnoreCase("Llarg")) {
-            usuari.setNumPrestecsLlargs(usuari.getNumPrestecsLlargs() - 1);
-        } else {
-            usuari.setNumPrestecsNormals(usuari.getNumPrestecsNormals() - 1);
-        }
     }
 
     /**
