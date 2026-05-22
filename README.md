@@ -18,3 +18,9 @@ FALTA:
 
 
 Proyecto casi terminado, faltan los test y tratar alguna excepcion que otra en Dades,BiblioUb o Llista.
+
+
+--- PARTE 2 ---
+- Arreglar y comentar el código de la parte 1. //Emad: Los test pasan ya todos, comprobar que todo este correcto y falta comentar.
+- Mirar como comenzar la parte gráfica y como incluirlo en este repositorio para no crear uno nuevo.
+- Separar el trabajo entre nosotros dos, gemini y el besto friendo chatgpt.
