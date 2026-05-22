@@ -37,7 +37,7 @@ public class AppBiblioUB extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 // 1. Creamos el diálogo pasándole esta ventana como padre y el adaptador
-                FrmAfegirUsuari ventanaUsuaris = new FrmAfegirUsuari(AppBiblioUB.this, adaptador);
+                FrmGestioUsuaris ventanaUsuaris = new FrmGestioUsuaris(AppBiblioUB.this, adaptador);
 
                 // 2. Lo hacemos visible (al ser modal, el usuario no podrá volver al menú hasta cerrarlo)
                 ventanaUsuaris.setVisible(true);
