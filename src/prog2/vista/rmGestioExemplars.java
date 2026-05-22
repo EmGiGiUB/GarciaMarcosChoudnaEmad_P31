@@ -2,14 +2,12 @@ package prog2.vista;
 
 import javax.swing.*;
 
-public class FrmAfegirExemplar extends JDialog {
+public class rmGestioExemplars extends JDialog {
     private JPanel contentPane;
-    private JTextField txtNom;
-    private JTextField txtEmail;
-    private JTextField txtAdreca;
     private JButton buttonOK;
+    private JButton buttonCancel;
 
-    public FrmAfegirExemplar() {
+    public rmGestioExemplars() {
         setContentPane(contentPane);
         setModal(true);
         getRootPane().setDefaultButton(buttonOK);
