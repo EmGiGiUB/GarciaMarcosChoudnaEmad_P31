@@ -16,7 +16,15 @@
           <text value="Llista d'Usuaris Registrats:"/>
         </properties>
       </component>
-      <scrollpane id="b52f7">
+      <component id="fdf3f" class="javax.swing.JButton" binding="btnTornar">
+        <constraints>
+          <grid row="2" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+        </constraints>
+        <properties>
+          <text value="Tornar al Menú"/>
+        </properties>
+      </component>
+      <scrollpane id="8d57c">
         <constraints>
           <grid row="1" column="0" row-span="1" col-span="2" vsize-policy="7" hsize-policy="7" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
         </constraints>
@@ -35,14 +43,6 @@
         </constraints>
         <properties>
           <text value="Afegir Usuari"/>
-        </properties>
-      </component>
-      <component id="fdf3f" class="javax.swing.JButton" binding="btnTornar">
-        <constraints>
-          <grid row="2" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
-        </constraints>
-        <properties>
-          <text value="Tornar al Menú"/>
         </properties>
       </component>
     </children>
