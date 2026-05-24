@@ -62,7 +62,7 @@ public class FrmAfegirUsuari extends JDialog {
         }
 
         try {
-            adaptador.afegirUsuari(nom, email, "No especificada", esEstudiant);
+            adaptador.afegirUsuari(email, nom,"No especificada", esEstudiant);
 
             JOptionPane.showMessageDialog(this, "Usuari afegit correctament.", "Èxit", JOptionPane.INFORMATION_MESSAGE);
 

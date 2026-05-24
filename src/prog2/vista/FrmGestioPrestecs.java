@@ -77,24 +77,20 @@ public class FrmGestioPrestecs extends JDialog {
 
     private void actualitzarLlista() {
         DefaultListModel<String> model = new DefaultListModel<>();
-        ArrayList<String> llistaPrestecsStr;
-
-
-        if (chkNoRetornats.isSelected()) {
-            llistaPrestecsStr = adaptador.mostrarPrestecs();
-        } else {
-            llistaPrestecsStr = adaptador.mostrarPrestecs();
-        }
+        ArrayList<String> llistaPrestecsStr = adaptador.mostrarPrestecs();
 
         if (llistaPrestecsStr != null) {
             for (String pStr : llistaPrestecsStr) {
-                if (chkNoRetornats.isSelected() && pStr.toLowerCase().contains("retornat: sí")) {
-                    continue;
+
+                if (chkNoRetornats.isSelected()) {
+                    String textoMinusculas = pStr.toLowerCase();
+                    if (textoMinusculas.contains("retornat = true")) {
+                        continue;
+                    }
                 }
                 model.addElement(pStr);
             }
         }
-
         lstPrestecs.setModel(model);
     }
 }
