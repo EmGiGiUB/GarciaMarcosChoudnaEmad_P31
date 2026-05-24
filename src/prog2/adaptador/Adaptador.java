@@ -44,20 +44,38 @@ public class Adaptador {
        dades.afegirExemplar(id, titol, autor, prestecLlarg);
     }
 
-    public ArrayList<Exemplar> mostrarExemplars () {
-        return dades.recuperaExemplars();
+    public ArrayList<String> mostrarExemplars () {
+        ArrayList<String> llistaStrings = new ArrayList<>();
+
+        for (Exemplar ex : dades.recuperaExemplars()) {
+            llistaStrings.add(ex.toString());
+        }
+
+        return llistaStrings;
     }
 
     public void afegirUsuari (String email, String nom, String adreca, boolean isProfessor) {
         dades.afegirUsuari(email, nom, adreca, isProfessor);
     }
 
-    public ArrayList<Usuari> mostrarUsuaris () {
-        return dades.recuperaUsuaris();
+    public ArrayList<String> mostrarUsuaris () {
+        ArrayList<String> llistaStrings = new ArrayList<>();
+
+        for (Usuari ex : dades.recuperaUsuaris()) {
+            llistaStrings.add(ex.toString());
+        }
+
+        return llistaStrings;
     }
 
-    public ArrayList<Prestec> mostrarPrestecs () {
-        return dades.recuperaPrestecs();
+    public ArrayList<String> mostrarPrestecs () {
+        ArrayList<String> llistaStrings = new ArrayList<>();
+
+        for (Prestec ex : dades.recuperaPrestecs()) {
+            llistaStrings.add(ex.toString());
+        }
+
+        return llistaStrings;
     }
 
     public void afegirPrestec(int exemplarPos, int usuariPos, boolean esLlarg) {
