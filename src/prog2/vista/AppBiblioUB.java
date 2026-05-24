@@ -13,6 +13,7 @@ public class AppBiblioUB extends JFrame {
     private JButton btnGestioPrestecs;
     private JButton btnGuardarDades;
     private JButton btnCargarDades;
+    private JLabel titulo;
 
     // Añadimos el adaptador como atributo
     private Adaptador adaptador;
@@ -129,7 +130,16 @@ public class AppBiblioUB extends JFrame {
 
     }
 
+
+
     public static void main(String[] args) {
+        try {
+            // Esto pone el estilo visual de Windows/Mac/Linux según donde se ejecute
+            UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
         // Lanzamos la aplicación
         SwingUtilities.invokeLater(() -> {
             AppBiblioUB ventana = new AppBiblioUB();
